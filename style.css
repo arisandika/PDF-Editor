@@ -723,3 +723,10 @@ button {
     font-size: 0.72rem;
   }
 }
+
+.el-toolbar .toolbar-crop-select {
+  height: 22px;
+  font-size: 10px;
+  padding: 0 4px;
+  width: 90px;
+}

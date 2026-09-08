@@ -41,6 +41,17 @@
         f4: { w: 595.28, h: 935.43, label: "F4" },
     };
 
+    var CROP_RATIOS = [
+        { key: "original", label: "Rasio Asli", ratio: null },
+        { key: "1:1", label: "1:1 (Persegi)", ratio: 1 },
+        { key: "4:3", label: "4:3", ratio: 4 / 3 },
+        { key: "3:4", label: "3:4", ratio: 3 / 4 },
+        { key: "16:9", label: "16:9", ratio: 16 / 9 },
+        { key: "9:16", label: "9:16", ratio: 9 / 16 },
+        { key: "3:2", label: "3:2", ratio: 3 / 2 },
+        { key: "2:3", label: "2:3", ratio: 2 / 3 },
+    ];
+
     var DEFAULT_FONT_KEY = "inter";
 
     /* =========================================================
@@ -48,6 +59,7 @@
     ========================================================= */
     var state = {
         tool: "select",
+        currentFileName: null,
         zoomFactor: 1,
         sourcePdfBytes: null,
         pages: [],
@@ -394,6 +406,11 @@
         reader.onload = function (ev) {
             var bytes = new Uint8Array(ev.target.result);
             state.sourcePdfBytes = bytes;
+
+            state.currentFileName = file.name.replace(/\.pdf$/i, "");
+            exportFileNameInput.value = state.currentFileName + "-filled";
+
+
             var loadingTask = pdfjsLib.getDocument({ data: bytes.slice(0) });
             loadingTask.promise
                 .then(function (pdf) {
@@ -431,6 +448,10 @@
     function addBlankPageAction(sizeKey) {
         var sz = PAPER_SIZES[sizeKey] || PAPER_SIZES.a4;
         var page = addPage({ sourcePdfPageIndex: null, pdfJsPage: null, ptWidth: sz.w, ptHeight: sz.h }, true);
+        if (!state.currentFileName) {
+            state.currentFileName = "dokumen";
+            exportFileNameInput.value = state.currentFileName + "-filled";
+        }
         updateEmptyState();
         return page;
     }
@@ -663,6 +684,14 @@
 
     function handleOverlayClick(page, e) {
         var pt = clickToPagePt(page, e);
+
+        var editingDom = document.querySelector('.pdf-textbox[contenteditable="true"]');
+        if (editingDom) {
+            editingDom.blur();
+            setTool("select");
+            return;
+        }
+
         if (state.tool === "text") {
             createTextElement(page, pt.xPt, pt.yPt, "", true, true);
         } else if (state.tool === "checkmark") {
@@ -926,8 +955,11 @@
             wPt: wPt, hPt: hPt,
             aspect: img.aspect,
             dataUrl: img.dataUrl,
+            originalDataUrl: img.dataUrl,
+            originalAspect: img.aspect,
+            cropRatioKey: "original",
             opacity: 1,
-            lockAspect: false,
+            lockAspect: true,
         };
         page.elements.push(el);
         buildImageDom(page, el);
@@ -938,6 +970,82 @@
             undo: function () { deleteElementInternal(page, el); },
             redo: function () { reinsertElement(page, el); },
         });
+    }
+
+    function cropImageCenter(dataUrl, targetRatio) {
+        return new Promise(function (resolve, reject) {
+            var img = new Image();
+            img.onload = function () {
+                var sw = img.naturalWidth, sh = img.naturalHeight;
+                var srcRatio = sw / sh;
+                var cw, ch, cx, cy;
+                if (srcRatio > targetRatio) {
+                    ch = sh; cw = sh * targetRatio; cx = (sw - cw) / 2; cy = 0;
+                } else {
+                    cw = sw; ch = sw / targetRatio; cx = 0; cy = (sh - ch) / 2;
+                }
+                var canvas = document.createElement("canvas");
+                canvas.width = cw; canvas.height = ch;
+                canvas.getContext("2d").drawImage(img, cx, cy, cw, ch, 0, 0, cw, ch);
+                resolve(canvas.toDataURL("image/png"));
+            };
+            img.onerror = reject;
+            img.src = dataUrl;
+        });
+    }
+
+    function applyCropRatio(page, el, ratioKey) {
+        var def = CROP_RATIOS.find(function (r) { return r.key === ratioKey; });
+        if (!def || !el.originalDataUrl) return;
+
+        var oldDataUrl = el.dataUrl, oldAspect = el.aspect,
+            oldWPt = el.wPt, oldHPt = el.hPt, oldCropKey = el.cropRatioKey;
+
+        function finishApply() {
+            if (el.domEl) {
+                var imgTag = el.domEl.querySelector("img");
+                if (imgTag) imgTag.src = el.dataUrl;
+            }
+            renderImageElStyle(page, el);
+            repositionToolbarFor(el);
+        }
+
+        function apply(ratioDef, cb) {
+            el.cropRatioKey = ratioDef.key;
+            if (ratioDef.ratio === null) {
+                el.dataUrl = el.originalDataUrl;
+                el.aspect = el.originalAspect;
+                el.hPt = el.wPt / el.aspect;
+                finishApply();
+                if (cb) cb();
+            } else {
+                cropImageCenter(el.originalDataUrl, ratioDef.ratio).then(function (newDataUrl) {
+                    el.dataUrl = newDataUrl;
+                    el.aspect = ratioDef.ratio;
+                    el.hPt = el.wPt / el.aspect;
+                    finishApply();
+                    if (cb) cb();
+                });
+            }
+        }
+
+        apply(def, function () {
+            pushHistory({
+                undo: function () {
+                    el.dataUrl = oldDataUrl; el.aspect = oldAspect;
+                    el.wPt = oldWPt; el.hPt = oldHPt; el.cropRatioKey = oldCropKey;
+                    finishApply(); syncCropSelect(el);
+                },
+                redo: function () { apply(def, function () { syncCropSelect(el); }); },
+            });
+        });
+    }
+
+    function syncCropSelect(el) {
+        if (el.toolbarEl) {
+            var sel = el.toolbarEl.querySelector(".toolbar-crop-select");
+            if (sel) sel.value = el.cropRatioKey || "original";
+        }
     }
 
     function buildImageDom(page, el) {
@@ -1146,6 +1254,27 @@
             tb.appendChild(opRange);
         }
 
+        if (el.type === "image") {
+            var cropLabel = document.createElement("span");
+            cropLabel.className = "toolbar-op-label";
+            cropLabel.textContent = "Crop";
+            tb.appendChild(cropLabel);
+
+            var cropSelect = document.createElement("select");
+            cropSelect.className = "toolbar-crop-select field-select";
+            CROP_RATIOS.forEach(function (r) {
+                var o = document.createElement("option");
+                o.value = r.key; o.textContent = r.label;
+                cropSelect.appendChild(o);
+            });
+            cropSelect.value = el.cropRatioKey || "original";
+            cropSelect.addEventListener("pointerdown", function (e) { e.stopPropagation(); });
+            cropSelect.addEventListener("change", function () {
+                applyCropRatio(page, el, cropSelect.value);
+            });
+            tb.appendChild(cropSelect);
+        }
+
         var dupBtn = document.createElement("button");
         dupBtn.type = "button"; dupBtn.title = "Duplikat"; dupBtn.textContent = "⧉";
         dupBtn.addEventListener("pointerdown", function (e) { e.stopPropagation(); });
@@ -1230,12 +1359,18 @@
         var sel = getSelectedElement();
         var editingText = document.activeElement && document.activeElement.getAttribute &&
             document.activeElement.getAttribute("contenteditable") === "true";
+
+        if (e.key === "Escape") {
+            // Esc harus bekerja walau sedang mengetik: keluar dari edit lalu pindah ke tool select
+            if (editingText) document.activeElement.blur();
+            deselectAll();
+            setTool("select");
+            return;
+        }
         if (editingText) return;
         if ((e.key === "Delete" || e.key === "Backspace") && sel) {
             e.preventDefault();
             deleteElement(sel.page, sel.el);
-        } else if (e.key === "Escape") {
-            deselectAll();
         }
     });
 
