@@ -6,12 +6,15 @@
   --stamp: #1f6f4a;
   --stamp-rgb: 31, 111, 74;
 }
+
 * {
   box-sizing: border-box;
 }
+
 html {
   scroll-behavior: smooth;
 }
+
 body {
   background: var(--paper);
   color: var(--ink);
@@ -21,42 +24,53 @@ body {
     system-ui,
     sans-serif;
 }
+
 .font-display {
   font-family: Fraunces, ui-serif, Georgia, serif;
 }
+
 .font-mono {
   font-family:
     IBM Plex Mono,
     ui-monospace,
     monospace;
 }
+
 .hidden {
   display: none !important;
 }
+
 ::selection {
   background: rgba(var(--stamp-rgb), 0.22);
 }
+
 a,
 button {
   -webkit-tap-highlight-color: transparent;
 }
+
 .ledger-row {
   border-top: 1px solid var(--paper-line);
 }
+
 .ledger-row:last-child {
   border-bottom: 1px solid var(--paper-line);
 }
+
 .hero-card {
   transform: rotate(-1.4deg);
   transition: transform 0.35s cubic-bezier(0.2, 0.7, 0.3, 1);
 }
+
 .hero-card:hover {
   transform: rotate(0deg);
 }
+
 @media (prefers-reduced-motion: reduce) {
   .hero-card {
     transition: none;
   }
+
   html {
     scroll-behavior: auto;
   }
@@ -68,6 +82,7 @@ button {
   color: var(--ink-soft);
   margin-bottom: 0.25rem;
 }
+
 .field-input,
 .field-select {
   width: 100%;
@@ -80,10 +95,12 @@ button {
   outline: none;
   transition: border-color 0.12s;
 }
+
 .field-input:focus,
 .field-select:focus {
   border-color: var(--stamp);
 }
+
 .field-color {
   width: 34px;
   height: 30px;
@@ -93,6 +110,7 @@ button {
   background: #fff;
   cursor: pointer;
 }
+
 .btn-ghost-sm {
   font-size: 0.76rem;
   padding: 0.35rem 0.6rem;
@@ -107,13 +125,16 @@ button {
   transition: background 0.12s;
   white-space: nowrap;
 }
+
 .btn-ghost-sm:hover {
   background: #f4f3ee;
 }
+
 .btn-ghost-sm:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
+
 .btn-stamp-sm {
   font-size: 0.76rem;
   padding: 0.4rem 0.65rem;
@@ -129,13 +150,16 @@ button {
   white-space: nowrap;
   flex-shrink: 0;
 }
+
 .btn-stamp-sm:hover {
   opacity: 0.88;
 }
+
 .btn-stamp-sm:disabled {
   opacity: 0.5;
   cursor: not-allowed;
 }
+
 .icon-btn {
   width: 30px;
   height: 30px;
@@ -149,14 +173,17 @@ button {
   color: var(--ink-soft);
   flex-shrink: 0;
 }
+
 .icon-btn:hover {
   background: #f4f3ee;
   color: var(--ink);
 }
+
 .icon-btn:disabled {
   opacity: 0.4;
   cursor: not-allowed;
 }
+
 .switch {
   position: relative;
   display: inline-flex;
@@ -164,12 +191,14 @@ button {
   cursor: pointer;
   flex-shrink: 0;
 }
+
 .switch input {
   position: absolute;
   opacity: 0;
   width: 1px;
   height: 1px;
 }
+
 .switch-track {
   width: 34px;
   height: 20px;
@@ -178,6 +207,7 @@ button {
   position: relative;
   transition: background 0.15s;
 }
+
 .switch-thumb {
   position: absolute;
   top: 2px;
@@ -189,9 +219,11 @@ button {
   transition: transform 0.15s;
   box-shadow: 0 1px 2px rgba(0, 0, 0, 0.35);
 }
+
 .switch input:checked + .switch-track {
   background: var(--stamp);
 }
+
 .switch input:checked + .switch-track .switch-thumb {
   transform: translateX(14px);
 }
@@ -206,6 +238,7 @@ button {
   padding: 1rem;
   z-index: 100;
 }
+
 .lang-modal {
   background: #fff;
   border-radius: 12px;
@@ -214,21 +247,25 @@ button {
   padding: 1.5rem;
   box-shadow: 0 30px 70px -25px rgba(0, 0, 0, 0.45);
 }
+
 .lang-modal h3 {
   font-family: Fraunces, ui-serif, Georgia, serif;
   font-size: 1.2rem;
   margin: 0 0 0.4rem;
   color: var(--ink);
 }
+
 .lang-modal-desc {
   font-size: 0.82rem;
   color: var(--ink-soft);
   line-height: 1.5;
   margin: 0 0 1.1rem;
 }
+
 .lang-modal-field {
   margin-bottom: 1.1rem;
 }
+
 .lang-modal-actions {
   display: flex;
   justify-content: flex-end;
@@ -241,17 +278,21 @@ button {
   height: 100vh;
   overflow: hidden;
 }
+
 #topbar {
   min-height: 52px;
   scrollbar-width: thin;
 }
+
 #topbar::-webkit-scrollbar {
   height: 5px;
 }
+
 #topbar::-webkit-scrollbar-thumb {
   background: #d9d7cd;
   border-radius: 4px;
 }
+
 .tool-group {
   display: flex;
   align-items: center;
@@ -261,6 +302,7 @@ button {
   border-radius: 8px;
   padding: 3px;
 }
+
 .tool-btn {
   width: 32px;
   height: 32px;
@@ -274,14 +316,17 @@ button {
   cursor: pointer;
   flex-shrink: 0;
 }
+
 .tool-btn:hover {
   background: #fff;
   color: var(--ink);
 }
+
 .tool-btn.active {
   background: var(--ink);
   color: var(--paper);
 }
+
 .tool-divider {
   width: 1px;
   align-self: stretch;
@@ -289,10 +334,12 @@ button {
   background: #e7e5dc;
   flex-shrink: 0;
 }
+
 .nav-field {
   padding: 0.35rem 0.5rem;
   font-size: 0.78rem;
 }
+
 .brush-slider-wrap {
   display: flex;
   align-items: center;
@@ -303,6 +350,7 @@ button {
   border-radius: 999px;
   padding: 4px 10px;
 }
+
 .brush-slider-wrap input[type="range"] {
   width: 90px;
   accent-color: var(--stamp);
@@ -316,15 +364,18 @@ button {
     width 0.2s ease,
     transform 0.25s ease;
 }
+
 #pageSidebar.collapsed {
   width: 0 !important;
   border-right: none;
   overflow: hidden;
 }
+
 #pageSidebar.collapsed .p-2\.5,
 #pageSidebar.collapsed #pageThumbsList {
   opacity: 0;
 }
+
 .page-thumb {
   cursor: pointer;
   border: 2px solid transparent;
@@ -334,14 +385,17 @@ button {
   box-shadow: 0 1px 4px rgba(0, 0, 0, 0.12);
   position: relative;
 }
+
 .page-thumb.active {
   border-color: var(--stamp);
 }
+
 .page-thumb img,
 .page-thumb canvas {
   width: 100%;
   display: block;
 }
+
 .page-thumb .thumb-label {
   position: absolute;
   bottom: 3px;
@@ -355,6 +409,7 @@ button {
   padding: 1px 5px;
   border-radius: 4px;
 }
+
 .page-thumb-del {
   position: absolute;
   top: 3px;
@@ -372,6 +427,7 @@ button {
   border: none;
   cursor: pointer;
 }
+
 .page-thumb:hover .page-thumb-del {
   display: flex;
 }
@@ -379,6 +435,7 @@ button {
 #sidebarCloseBtnMobile {
   display: none;
 }
+
 #sidebarOverlay {
   display: none;
 }
@@ -387,6 +444,7 @@ button {
 #canvasScrollArea {
   position: relative;
 }
+
 .pages-container {
   display: flex;
   flex-direction: column;
@@ -394,21 +452,25 @@ button {
   gap: 28px;
   padding: 28px 16px 120px;
 }
+
 .pdf-page {
   position: relative;
   background: #fff;
   box-shadow: 0 10px 30px -12px rgba(0, 0, 0, 0.35);
   flex-shrink: 0;
 }
+
 .pdf-page canvas.page-render-canvas {
   display: block;
   width: 100%;
   height: 100%;
 }
+
 .page-overlay {
   position: absolute;
   inset: 0;
 }
+
 .page-index-badge {
   position: absolute;
   left: 50%;
@@ -420,12 +482,14 @@ button {
     monospace;
   color: var(--ink-soft);
 }
+
 .empty-state {
   display: flex;
   align-items: center;
   justify-content: center;
   min-height: calc(100vh - 52px);
 }
+
 .empty-state-inner {
   text-align: center;
 }
@@ -443,17 +507,21 @@ button {
   line-height: 1.25;
   user-select: none;
 }
+
 .pdf-textbox[contenteditable="true"] {
   cursor: text;
   user-select: text;
 }
+
 .pdf-textbox:hover {
   outline-color: rgba(var(--stamp-rgb), 0.45);
 }
+
 .pdf-textbox.selected {
   outline: 1.5px solid var(--stamp);
   background: rgba(var(--stamp-rgb), 0.05);
 }
+
 .pdf-textbox:empty::before {
   content: attr(data-placeholder);
   color: #9a9789;
@@ -467,6 +535,7 @@ button {
   cursor: move;
   touch-action: none;
 }
+
 .pdf-signature img,
 .pdf-image img {
   width: 100%;
@@ -474,6 +543,7 @@ button {
   display: block;
   pointer-events: none;
 }
+
 .pdf-signature.selected,
 .pdf-image.selected {
   outline: 1.5px solid var(--stamp);
@@ -492,6 +562,7 @@ button {
   z-index: 20;
   pointer-events: auto;
 }
+
 .el-toolbar button {
   width: 22px;
   height: 22px;
@@ -506,14 +577,17 @@ button {
   font-size: 11px;
   flex-shrink: 0;
 }
+
 .el-toolbar button:hover {
   background: rgba(255, 255, 255, 0.15);
 }
+
 .el-toolbar input[type="range"] {
   width: 60px;
   accent-color: var(--stamp);
   cursor: pointer;
 }
+
 .el-toolbar .toolbar-op-label {
   font-size: 9px;
   color: #d8d6ce;
@@ -543,9 +617,11 @@ button {
   padding: 10px 14px 14px;
   flex-shrink: 0;
 }
+
 #signaturePadDock.hidden {
   display: none;
 }
+
 #signaturePadCanvas {
   width: 100%;
   height: 130px;
@@ -576,16 +652,21 @@ button {
     width: 220px !important;
     box-shadow: none;
   }
+
   #pageSidebar.mobile-open {
     transform: translateX(0);
     box-shadow: 10px 0 30px rgba(0, 0, 0, 0.25);
   }
+
   #pageSidebar.collapsed {
     width: 220px !important;
-  } /* collapsed class unused on mobile; mobile-open controls visibility */
+  }
+
+  /* collapsed class unused on mobile; mobile-open controls visibility */
   #sidebarCloseBtnMobile {
     display: inline-flex;
   }
+
   #sidebarOverlay {
     display: none;
     position: fixed;
@@ -593,6 +674,7 @@ button {
     background: rgba(15, 17, 22, 0.42);
     z-index: 40;
   }
+
   #sidebarOverlay.show {
     display: block;
   }
@@ -602,18 +684,22 @@ button {
   .brush-slider-wrap input[type="range"] {
     width: 55px;
   }
+
   #signatureToolOptions span {
     display: none;
   }
+
   #topbar {
     gap: 4px;
     padding-left: 6px;
     padding-right: 6px;
   }
+
   .tool-btn {
     width: 28px;
     height: 28px;
   }
+
   .icon-btn {
     width: 27px;
     height: 27px;
@@ -622,19 +708,18 @@ button {
 
 @media (max-width: 640px) {
   #topbar {
-    flex-wrap: nowrap;
+    flex-wrap: wrap;
     overflow-x: auto;
     -webkit-overflow-scrolling: touch;
   }
+
   .topbar-actions {
     gap: 4px;
   }
+
   .btn-ghost-sm,
   .btn-stamp-sm {
     padding: 0.32rem 0.5rem;
     font-size: 0.72rem;
-  }
-  #zoomLabel {
-    display: none;
   }
 }
