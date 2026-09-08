@@ -1,0 +1,342 @@
+<!doctype html>
+<html lang="id">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>PDF Form Filler — Isi &amp; Tanda Tangani PDF Langsung di Browser</title>
+    <script src="https://cdn.tailwindcss.com"></script>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link id="googleFontsLink"
+        href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600;9..144,700&family=IBM+Plex+Mono:wght@400;500;600&family=IBM+Plex+Sans:wght@400;500;600;700&family=Inter:wght@400;500;600;700&family=Plus+Jakarta+Sans:wght@400;500;600;700&family=Poppins:wght@400;500;600;700&family=Roboto:wght@400;500;700&family=Montserrat:wght@400;500;600;700&family=Merriweather:wght@400;700&family=Lora:wght@400;500;600;700&family=Playfair+Display:wght@400;500;600;700&family=Source+Sans+3:wght@400;500;600;700&family=Space+Mono:wght@400;700&family=Caveat:wght@400;500;600;700&family=Dancing+Script:wght@400;500;600;700&family=Pacifico&family=Courier+Prime:wght@400;700&display=swap"
+        rel="stylesheet" />
+    <script src="https://cdn.jsdelivr.net/npm/pdfjs-dist@3.11.174/build/pdf.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/pdf-lib@1.17.1/dist/pdf-lib.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/@pdf-lib/fontkit@1.1.1/dist/fontkit.umd.min.js"></script>
+    <link rel="stylesheet" href="style.css" />
+</head>
+
+<body class="antialiased">
+    <div id="landingPage">
+        <header class="max-w-6xl mx-auto px-6 lg:px-10 py-6 flex items-center justify-between">
+            <div class="flex items-center gap-2">
+                <span
+                    class="w-7 h-7 rounded-[6px] bg-[var(--ink)] text-[var(--paper)] font-mono text-[11px] flex items-center justify-center font-semibold">PF</span>
+                <span class="font-mono text-sm tracking-tight">pdf-form-filler</span>
+            </div>
+            <button id="ctaTop"
+                class="font-mono text-xs border border-[var(--ink)] rounded-full px-4 py-2 hover:bg-[var(--ink)] hover:text-[var(--paper)] transition-colors">Buka
+                Editor</button>
+        </header>
+        <section class="max-w-6xl mx-auto px-6 lg:px-10 pt-10 pb-20 grid lg:grid-cols-2 gap-14 items-center">
+            <div>
+                <h1 class="font-display text-[2.6rem] leading-[1.08] sm:text-[3.2rem] font-medium text-[var(--ink)]">Isi
+                    form PDF,<br />tanpa jadi berantakan.</h1>
+                <p class="mt-6 text-[var(--ink-soft)] text-[1.05rem] leading-relaxed max-w-md">Unggah PDF apa saja —
+                    form lamaran, surat, kontrak — lalu tempel kotak teks di mana saja di atas kanvas aslinya, pilih
+                    font dari Google Fonts, dan bubuhkan tanda tangan digital. Layout aslinya tidak pernah berubah.
+                    Tidak perlu convert ke Word.</p>
+                <div class="mt-8 flex items-center gap-4">
+                    <button id="ctaMain"
+                        class="bg-[var(--stamp)] text-white font-medium rounded-md px-6 py-3.5 hover:opacity-90 transition-opacity">Buka
+                        Editor</button>
+                </div>
+            </div>
+            <div
+                class="hero-card bg-white shadow-[0_30px_70px_-30px_rgba(0,0,0,.4)] rounded-sm p-6 mx-auto w-full max-w-md font-mono">
+                <div class="flex items-center justify-between border-b-2 border-double border-[var(--ink)] pb-3 mb-4">
+                    <span class="text-[10px] tracking-[2px] font-bold font-sans">APPLICATION FORM</span>
+                    <span
+                        class="inline-block text-[7px] px-2 py-[3px] rounded-full bg-[#dff0d8] text-[#3c763d] tracking-wide">TERISI</span>
+                </div>
+                <div class="space-y-3 text-[9px] font-sans">
+                    <div>
+                        <div class="text-[8px] text-[var(--ink-soft)] uppercase tracking-wide">Nama Lengkap</div>
+                        <div class="border-b border-dashed border-[var(--ink)] pb-1 font-medium"
+                            style="font-family:'Caveat',cursive; font-size:14px;">Ariana Putri</div>
+                    </div>
+                    <div>
+                        <div class="text-[8px] text-[var(--ink-soft)] uppercase tracking-wide">Posisi yang Dilamar</div>
+                        <div class="border-b border-dashed border-[var(--ink)] pb-1 font-medium">Product Designer</div>
+                    </div>
+                    <div class="pt-2 flex items-end justify-between">
+                        <div class="text-[8px] text-[var(--ink-soft)]">Tanda tangan</div>
+                        <div style="font-family:'Dancing Script',cursive; font-size:20px;" class="text-[var(--stamp)]">
+                            Ariana P.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="max-w-6xl mx-auto px-6 lg:px-10 py-10">
+            <h2 class="font-display text-2xl mb-6 text-[var(--ink)]">Cara kerja</h2>
+            <div class="border-t border-[var(--paper-line)]">
+                <div class="ledger-row flex gap-6 py-5">
+                    <span class="font-mono text-sm text-[var(--ink-soft)] pt-0.5">01</span>
+                    <div>
+                        <div class="font-medium">Unggah PDF, ukuran &amp; layout aslinya tetap utuh</div>
+                        <div class="text-sm text-[var(--ink-soft)] mt-1 max-w-md">Tidak ada konversi ke format lain,
+                            jadi tidak ada risiko tabel atau kolom form jadi berantakan.</div>
+                    </div>
+                </div>
+                <div class="ledger-row flex gap-6 py-5">
+                    <span class="font-mono text-sm text-[var(--ink-soft)] pt-0.5">02</span>
+                    <div>
+                        <div class="font-medium">Tempel kotak teks di mana saja, atur font &amp; ukurannya</div>
+                        <div class="text-sm text-[var(--ink-soft)] mt-1 max-w-md">Klik di kanvas, ketik langsung,
+                            pindahkan bebas — lengkap dengan pilihan font dari Google Fonts.</div>
+                    </div>
+                </div>
+                <div class="ledger-row flex gap-6 py-5">
+                    <span class="font-mono text-sm text-[var(--ink-soft)] pt-0.5">03</span>
+                    <div>
+                        <div class="font-medium">Gambar tanda tangan, lalu unduh sebagai PDF</div>
+                        <div class="text-sm text-[var(--ink-soft)] mt-1 max-w-md">Atur ketebalan kuas seperti slider
+                            volume, tempel di kanvas, pilih ukuran kertas ekspor, unduh.</div>
+                    </div>
+                </div>
+            </div>
+        </section>
+        <section class="max-w-6xl mx-auto px-6 lg:px-10 py-16 text-center">
+            <button id="ctaBottom"
+                class="bg-[var(--ink)] text-[var(--paper)] font-medium rounded-md px-7 py-4 hover:opacity-90 transition-opacity">Buka
+                Editor</button>
+        </section>
+        <footer
+            class="max-w-6xl mx-auto px-6 lg:px-10 py-8 border-t border-[var(--paper-line)] flex flex-col sm:flex-row gap-2 justify-between text-xs text-[var(--ink-soft)]">
+            <span>Semua proses berjalan di browser kamu — file tidak pernah diunggah ke server mana pun.</span>
+            <span class="font-mono">pdf-form-filler</span>
+        </footer>
+    </div>
+
+    <div id="editorPage" class="hidden">
+        <div id="editorShell" class="min-h-screen flex flex-col">
+            <div id="topbar"
+                class="sticky top-0 z-30 bg-white border-b border-[#E7E5DC] px-2 sm:px-3 lg:px-4 py-2 flex items-center gap-1.5 sm:gap-2 flex-nowrap overflow-x-auto">
+                <button id="backToLanding"
+                    class="flex items-center gap-1.5 text-sm text-[var(--ink-soft)] hover:text-[var(--ink)] mr-0.5 flex-shrink-0">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2">
+                        <path d="M19 12H5M12 19l-7-7 7-7" />
+                    </svg>
+                </button>
+                <button type="button" id="sidebarToggleBtn" class="icon-btn flex-shrink-0"
+                    title="Sembunyikan/Tampilkan sidebar halaman">
+                    <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                        stroke-width="1.8">
+                        <rect x="3" y="4" width="18" height="16" rx="2" />
+                        <path d="M9 4v16" />
+                    </svg>
+                </button>
+                <div class="tool-group flex-shrink-0">
+                    <button type="button" class="tool-btn active" data-tool="select" title="Pilih / Pindah">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.8">
+                            <path d="M4 3l7 18 2.5-7.5L21 11 4 3z" />
+                        </svg>
+                    </button>
+                    <button type="button" class="tool-btn" data-tool="text" title="Kotak Teks">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.8">
+                            <path d="M5 5h14M12 5v14" />
+                        </svg>
+                    </button>
+                    <button type="button" class="tool-btn" data-tool="signature" title="Tanda Tangan">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.8">
+                            <path d="M3 17c2-4 4 3 6-1s3-8 5-8 1 7 3 7 2-3 4-3" />
+                        </svg>
+                    </button>
+                    <button type="button" class="tool-btn" data-tool="checkmark" title="Tanda Centang">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M4 12l5 5L20 6" />
+                        </svg>
+                    </button>
+                    <button type="button" class="tool-btn" data-tool="image" title="Sisipkan Gambar">
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="1.8">
+                            <rect x="3" y="3" width="18" height="18" rx="2" />
+                            <circle cx="8.5" cy="8.5" r="1.5" />
+                            <path d="M21 15l-5-5L5 21" />
+                        </svg>
+                    </button>
+                </div>
+                <input type="file" id="imageFileInput" accept="image/*" class="hidden" />
+                <div class="tool-divider"></div>
+                <div id="textToolOptions" class="flex items-center gap-1.5 flex-wrap flex-shrink-0">
+                    <select id="fontFamilySelect" class="field-select nav-field" style="width:150px"
+                        title="Font"></select>
+                    <select id="fontSizeSelect" class="field-select nav-field" style="width:64px" title="Ukuran font">
+                        <option>8</option>
+                        <option>9</option>
+                        <option>10</option>
+                        <option>11</option>
+                        <option selected>12</option>
+                        <option>14</option>
+                        <option>16</option>
+                        <option>18</option>
+                        <option>20</option>
+                        <option>24</option>
+                        <option>28</option>
+                        <option>32</option>
+                        <option>40</option>
+                    </select>
+                    <input type="color" id="textColorInput" class="field-color" value="#171b22" title="Warna teks" />
+                    <button type="button" id="boldBtn" class="icon-btn" title="Tebal"><b>B</b></button>
+                </div>
+                <div id="signatureToolOptions" class="hidden items-center gap-2 flex-wrap flex-shrink-0">
+                    <input type="color" id="sigColorInput" class="field-color" value="#171b22" title="Warna tinta" />
+                    <div class="brush-slider-wrap" title="Ketebalan kuas">
+                        <svg width="13" height="13" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="3" />
+                        </svg>
+                        <input type="range" id="brushSizeInput" min="1" max="14" step="1" value="3" />
+                        <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <circle cx="12" cy="12" r="8" />
+                        </svg>
+                    </div>
+                    <button type="button" id="clearSigPadBtn" class="btn-ghost-sm">Bersihkan</button>
+                    <button type="button" id="confirmSigBtn" class="btn-stamp-sm">Tempel ke PDF</button>
+                    <span class="text-[11px] text-[var(--ink-soft)] hidden lg:inline">Gambar tanda tangan di bawah
+                        kanvas ↓</span>
+                </div>
+                <div id="imageToolOptions" class="hidden items-center gap-2 flex-wrap flex-shrink-0">
+                    <span class="text-[11px] text-[var(--ink-soft)]">Klik kanvas untuk menempatkan gambar</span>
+                </div>
+                <div class="tool-divider"></div>
+                <div class="flex items-center gap-1 flex-shrink-0">
+                    <button type="button" id="undoBtn" class="icon-btn" title="Urungkan (Ctrl+Z)" disabled>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M9 14L4 9l5-5" />
+                            <path d="M4 9h10a6 6 0 010 12h-3" />
+                        </svg>
+                    </button>
+                    <button type="button" id="redoBtn" class="icon-btn" title="Ulangi (Ctrl+Y)" disabled>
+                        <svg width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M15 14l5-5-5-5" />
+                            <path d="M20 9H10a6 6 0 000 12h3" />
+                        </svg>
+                    </button>
+                </div>
+                <div class="tool-divider hidden sm:block"></div>
+                <div class="flex items-center gap-1 flex-shrink-0">
+                    <button type="button" id="zoomOutBtn" class="icon-btn" title="Perkecil">−</button>
+                    <span id="zoomLabel" class="text-xs font-mono text-[var(--ink-soft)] w-10 text-center">100%</span>
+                    <button type="button" id="zoomInBtn" class="icon-btn" title="Perbesar">+</button>
+                </div>
+                <div class="topbar-actions ml-auto flex items-center gap-2 flex-shrink-0 justify-end">
+                    <button type="button" id="duplicateBtn" class="btn-ghost-sm hidden lg:inline-flex"
+                        title="Duplikat elemen terpilih">Duplikat</button>
+                    <button type="button" id="deleteElBtn" class="btn-ghost-sm hidden lg:inline-flex"
+                        title="Hapus elemen terpilih">Hapus</button>
+                    <button type="button" id="uploadPdfBtn" class="btn-ghost-sm">Unggah PDF</button>
+                    <input type="file" id="pdfFileInput" accept="application/pdf" class="hidden" />
+                    <button type="button" id="addBlankPageBtn" class="btn-ghost-sm hidden sm:inline-flex">+ Halaman
+                        Kosong</button>
+                    <button type="button" id="resetEditorBtn" class="btn-ghost-sm hidden sm:inline-flex">Reset</button>
+                    <button type="button" id="openExportModalBtn" class="btn-stamp-sm">
+                        <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                            stroke-width="2">
+                            <path d="M12 3v12m0 0l-4-4m4 4l4-4M4 21h16" />
+                        </svg>
+                        <span class="hidden xs:inline sm:inline">Unduh PDF</span>
+                    </button>
+                </div>
+            </div>
+            <div class="flex-1 flex flex-row min-h-0 relative">
+                <aside id="pageSidebar"
+                    class="w-[112px] lg:w-[140px] flex-shrink-0 bg-white border-r border-[#E7E5DC] overflow-y-auto">
+                    <div class="p-2.5 flex items-center justify-between">
+                        <span
+                            class="text-[10px] font-mono uppercase tracking-wide text-[var(--ink-soft)]">Halaman</span>
+                        <button type="button" id="sidebarCloseBtnMobile" class="icon-btn lg:hidden"
+                            title="Tutup sidebar" style="width:22px;height:22px">✕</button>
+                    </div>
+                    <div id="pageThumbsList" class="flex flex-col gap-2.5 px-2.5 pb-4"></div>
+                </aside>
+                <div id="sidebarOverlay"></div>
+                <main id="canvasScrollArea" class="flex-1 overflow-auto bg-[var(--paper)]">
+                    <div id="emptyState" class="empty-state">
+                        <div class="empty-state-inner">
+                            <div class="font-display text-xl text-[var(--ink)] mb-2">Belum ada dokumen</div>
+                            <p class="text-sm text-[var(--ink-soft)] mb-5 max-w-xs mx-auto">Unggah file PDF yang mau
+                                kamu isi, atau mulai dari halaman kosong dengan ukuran kertas pilihanmu.</p>
+                            <div class="flex items-center justify-center gap-2 flex-wrap">
+                                <button type="button" id="emptyUploadBtn" class="btn-stamp-sm">Unggah PDF</button>
+                                <select id="blankPaperSizeSelect" class="field-select" style="width:auto"></select>
+                                <button type="button" id="emptyBlankBtn" class="btn-ghost-sm">Buat Halaman
+                                    Kosong</button>
+                            </div>
+                        </div>
+                    </div>
+                    <div id="pagesContainer" class="pages-container"></div>
+                </main>
+            </div>
+            <div id="signaturePadDock" class="hidden">
+                <canvas id="signaturePadCanvas" width="900" height="180"></canvas>
+            </div>
+        </div>
+    </div>
+
+    <div id="exportModalOverlay" class="lang-modal-overlay hidden">
+        <div id="exportModal" class="lang-modal" style="max-width:400px" role="dialog" aria-modal="true">
+            <h3>Opsi Unduh PDF</h3>
+            <p class="lang-modal-desc">Atur bagaimana file PDF akhir kamu dibuat sebelum diunduh.</p>
+            <div class="lang-modal-field">
+                <span class="field-label">Ukuran kertas</span>
+                <select id="exportPaperSizeSelect" class="field-select">
+                    <option value="original">Sama seperti dokumen asli</option>
+                    <option value="a4">A4 (210 × 297 mm)</option>
+                    <option value="letter">Letter (8.5 × 11 in)</option>
+                    <option value="legal">Legal (8.5 × 14 in)</option>
+                    <option value="f4">F4 (210 × 330 mm)</option>
+                </select>
+            </div>
+            <div class="lang-modal-field">
+                <span class="field-label">Kualitas render halaman</span>
+                <select id="exportQualitySelect" class="field-select">
+                    <option value="1.5">Standar (cepat)</option>
+                    <option value="2.5" selected>Tinggi (disarankan)</option>
+                    <option value="3.5">Sangat tinggi (file lebih besar)</option>
+                </select>
+            </div>
+            <label class="flex items-center justify-between text-xs text-[var(--ink-soft)] mb-2">
+                <span>Sertakan garis putus-putus kotak teks (mode pratinjau)</span>
+                <label class="switch"><input type="checkbox" id="exportShowOutlinesToggle" /><span
+                        class="switch-track"><span class="switch-thumb"></span></span></label>
+            </label>
+            <div class="lang-modal-field">
+                <span class="field-label">Nama file</span>
+                <input type="text" id="exportFileNameInput" class="field-input" value="dokumen-terisi" />
+            </div>
+            <div class="lang-modal-actions">
+                <button id="exportModalCancel" type="button" class="btn-ghost-sm">Batal</button>
+                <button id="exportModalConfirm" type="button" class="btn-stamp-sm"><span id="exportConfirmLabel">Unduh
+                        PDF</span></button>
+            </div>
+        </div>
+    </div>
+
+    <div id="resetModalOverlay" class="lang-modal-overlay hidden">
+        <div id="resetModal" class="lang-modal" role="dialog" aria-modal="true">
+            <h3>Reset Editor</h3>
+            <p class="lang-modal-desc">Semua halaman, kotak teks, dan tanda tangan yang belum diunduh akan hilang.
+                Lanjutkan?</p>
+            <div class="lang-modal-actions">
+                <button id="resetModalCancel" type="button" class="btn-ghost-sm">Batal</button>
+                <button id="resetModalConfirm" type="button" class="btn-stamp-sm">Reset</button>
+            </div>
+        </div>
+    </div>
+
+    <div id="toast"
+        class="fixed bottom-5 left-1/2 -translate-x-1/2 translate-y-20 opacity-0 transition-all duration-300 bg-[var(--ink)] text-white text-sm px-4 py-2.5 rounded-lg shadow-lg z-50 pointer-events-none">
+    </div>
+    <script src="script.js"></script>
+</body>
+
+</html>
